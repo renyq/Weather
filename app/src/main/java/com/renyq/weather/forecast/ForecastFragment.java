@@ -93,6 +93,7 @@ public class ForecastFragment extends Fragment implements ForecastContract.View 
 
     @Override
     public void showForecast(final String forecast) {
+        //show result
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
