@@ -1,5 +1,7 @@
 package com.renyq.weather.forecast;
 
+import com.renyq.weather.net.RetrofitHelper;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -11,14 +13,21 @@ import dagger.Provides;
 public class ForecastPresenterModule {
 
     private final ForecastContract.View mView;
+    private final RetrofitHelper mRetrofitHelper;
 
-    public ForecastPresenterModule(ForecastContract.View view) {
+    public ForecastPresenterModule(ForecastContract.View view, RetrofitHelper retrofitHelper) {
         mView = view;
+        mRetrofitHelper = retrofitHelper;
     }
 
     @Provides
     ForecastContract.View provideTasksContractView() {
         return mView;
+    }
+
+    @Provides
+    RetrofitHelper provideRetrofitHelper() {
+        return mRetrofitHelper;
     }
 
 }

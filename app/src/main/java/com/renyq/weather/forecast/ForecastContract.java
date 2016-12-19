@@ -1,6 +1,6 @@
 package com.renyq.weather.forecast;
 
-import java.util.List;
+import android.support.annotation.Nullable;
 
 /**
  * Created by Jen Yongchiang on 2016/12/14-16:29.
@@ -18,6 +18,6 @@ public interface ForecastContract {
 
     interface UserActionsListener {
 
-        void loadForecast();
+        void loadForecast(String city, @Nullable String lang);
     }
 }

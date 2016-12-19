@@ -16,51 +16,62 @@
 
 package com.renyq.weather.forecast;
 
-import java.io.IOException;
+import android.support.annotation.Nullable;
+
+import com.renyq.weather.app.Constants;
+import com.renyq.weather.net.RetrofitHelper;
 
 import javax.inject.Inject;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import rx.Subscription;
+import rx.functions.Action1;
 
 
 public final class ForecastPresenter implements ForecastContract.UserActionsListener {
 
     private final ForecastContract.View mForecastView;
+    private final RetrofitHelper mRetrofitHelper;
 
     @Inject
-    public ForecastPresenter(ForecastContract.View forecastView) {
+    public ForecastPresenter(ForecastContract.View forecastView, RetrofitHelper mRetrofitHelper) {
         mForecastView = forecastView;
+        this.mRetrofitHelper = mRetrofitHelper;
     }
 
     @Override
-    public void loadForecast() {
+    public void loadForecast(String city, @Nullable String lang) {
         mForecastView.setProgressIndicator(true);
+        Subscription rxSubscription = mRetrofitHelper.getWeatherApiService()
+                .getForecast(city, Constants.HEWEATHER_API, null)
+                .subscribe(new Action1<Forecast>() {
+                    @Override
+                    public void call(Forecast forecast) {
+                        mForecastView.setProgressIndicator(false);
+                        mForecastView.showForecast(forecast.toString());
+                    }
+                });
 
-        OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder()
-                .url("https://free-api.heweather.com/v5/forecast?city=beijing&key=331f4c7b25594566a159950a0c6398ff")
-                .get()
-                .build();
-
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                mForecastView.setProgressIndicator(false);
-                mForecastView.showForecast("error");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                mForecastView.setProgressIndicator(false);
-                mForecastView.showForecast(response.body().string());
-            }
-        });
+//        OkHttpClient client = new OkHttpClient();
+//
+//        Request request = new Request.Builder()
+//                .url("https://free-api.heweather.com/v5/forecast?city=beijing&key=331f4c7b25594566a159950a0c6398ff")
+//                .get()
+//                .build();
+//
+//
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                mForecastView.setProgressIndicator(false);
+//                mForecastView.showForecast("error");
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                mForecastView.setProgressIndicator(false);
+//                mForecastView.showForecast(response.body().string());
+//            }
+//        });
 
     }
 }

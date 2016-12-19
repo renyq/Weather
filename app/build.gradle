@@ -31,15 +31,21 @@ dependencies {
     compile "com.android.support:design:$rootProject.supportLibraryVersion"
     compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
     compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
+
     // Dependencies for local unit tests
     testCompile "junit:junit:$rootProject.ext.junitVersion"
+
     // Dagger dependencies
     apt "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
     provided 'org.glassfish:javax.annotation:10.0-b28'
     compile "com.google.dagger:dagger:$rootProject.daggerVersion"
 
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
-//    compile 'io.reactivex:rxjava:1.2.3'
-//    compile 'com.squareup.okhttp3:okhttp:3.5.0'
-//    compile 'com.squareup.okio:okio:1.11.0'
+    compile 'io.reactivex:rxjava:1.2.3'
+    compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile 'com.squareup.okio:okio:1.11.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 }

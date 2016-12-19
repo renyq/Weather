@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.renyq.weather.R;
+import com.renyq.weather.net.DaggerRetrofitHelperComponent;
+import com.renyq.weather.net.RetrofitHelper;
+import com.renyq.weather.net.RetrofitHelperModule;
 
 /**
  * Created by renyq on 2016/12/14-17:51-18:19-18:20.
@@ -20,6 +23,7 @@ public class ForecastFragment extends Fragment implements ForecastContract.View 
 
     private ForecastPresenter mActionsListener;
     private TextView text;
+    private RetrofitHelper retrofitHelper;
 
     public ForecastFragment() {
     }
@@ -44,8 +48,12 @@ public class ForecastFragment extends Fragment implements ForecastContract.View 
 
         setRetainInstance(true);
 
+        retrofitHelper = DaggerRetrofitHelperComponent.builder()
+                .retrofitHelperModule(new RetrofitHelperModule())
+                .build().getRetrofitHelper();
+
         mActionsListener = DaggerForecastComponent.builder()
-                .forecastPresenterModule(new ForecastPresenterModule(this))
+                .forecastPresenterModule(new ForecastPresenterModule(this),retrofitHelper)
                 .build().getForecastPresenter();
     }
 
@@ -67,7 +75,7 @@ public class ForecastFragment extends Fragment implements ForecastContract.View 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mActionsListener.loadForecast();
+                mActionsListener.loadForecast("beijing",null);
             }
         });
 
